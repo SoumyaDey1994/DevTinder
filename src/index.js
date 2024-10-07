@@ -29,9 +29,23 @@ app.delete("/users/:id", (req, res) => {
   });
 });
 
-app.get("/test", (req, res) => {
-  return res.status(200).send("Greetings from /test route...!!");
-});
+app.get(
+  "/test",
+  (req, res, next) => {
+    console.log("Route Handler 1");
+    next();
+  },
+  (req, res, next) => {
+    console.log("Route Handler 2");
+    next();
+    // return res.status(200).send("Return from 2nd handler");
+  },
+  (req, res, next) => {
+    console.log("Route Handler 3");
+    // next();
+    return res.status(200).send("Return from 3rd handler");
+  }
+);
 
 app.get("/hello", (req, res) => {
   return res.status(200).send("Greetings from /hello route...!!");

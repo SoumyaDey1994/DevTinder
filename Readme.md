@@ -23,3 +23,13 @@
     - Create GET & POST API for /users route
     - Req path wilcard charts (*, +, ?, () & regex)
     - Query Params: req.query & Dynamic Routes: req.params
+    - app.use(...) vs app.get(), app.post(), etc
+
+### Route Handlers
+    - Chain of route handler
+    - (req, res, next) arguments of route handler
+    - request timeout when response is not sent
+    - Error when execute route handler after sending response once
+    - Error when calling next() post sending response
+    - 404 error if next() is called from last route handler
+    - app crash if called next() just before sending response in same handler
