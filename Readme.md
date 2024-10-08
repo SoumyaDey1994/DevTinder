@@ -33,3 +33,6 @@
     - Error when calling next() post sending response
     - 404 error if next() is called from last route handler
     - app crash if called next() just before sending response in same handler
+    - What is middleware & why to use it ?
+    - Use chain of middlewares to perform taks 1 after another in sequence
+    - Common error handler route

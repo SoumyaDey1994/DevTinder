@@ -43,12 +43,19 @@ app.get(
   (req, res, next) => {
     console.log("Route Handler 3");
     // next();
-    return res.status(200).send("Return from 3rd handler");
+    // return res.status(200).send("Return from 3rd handler");
+    throw new Error("Cutom error");
   }
 );
 
 app.get("/hello", (req, res) => {
   return res.status(200).send("Greetings from /hello route...!!");
+});
+
+app.get("/", (err, req, res, next) => {
+  if(err) {
+    res.status(500).send("Oops!! Something went wrong");
+  }
 });
 
 app.get("/", (req, res) => {
