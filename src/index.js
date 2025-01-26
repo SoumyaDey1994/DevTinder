@@ -7,6 +7,12 @@ const users = [];
 
 app.use(bodyParser.json());
 
+app.get("/users/:id", (req, res) => {
+  const userId = req.params.id;
+  const targetUser = users.find(user => user.id.toString() === userId);
+  return res.status(200).send(targetUser || {});
+});
+
 app.get("/users", (req, res) => {
   return res.status(200).send(users);
 });
