@@ -1,23 +1,42 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 const users = [];
+
+app.use(bodyParser.json());
 
 app.get("/users", (req, res) => {
   return res.status(200).send(users);
 });
 
 app.post("/users", (req, res) => {
-  return res.status(201).send({
+  const newUser = {
     id: Math.floor(Math.random() * 10000),
+    ...req.body,
+  };
+  users.push(newUser);
+
+  return res.status(201).send({
+    ...newUser,
     message: "User created successfully",
   });
 });
 
 app.put("/users/:id", (req, res) => {
+  const userId = req.params.id;
+  const targetUserIndex = users.findIndex(
+    (user) => user.id.toString() === userId
+  );
+  if (targetUserIndex > -1) {
+    users[targetUserIndex] = {
+      id: userId,
+      ...req.body,
+    };
+  }
   return res.status(200).send({
-    id: req.params.id,
+    ...users[targetUserIndex],
     message: "User updated successfully",
   });
 });
@@ -53,7 +72,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/", (err, req, res, next) => {
-  if(err) {
+  if (err) {
     res.status(500).send("Oops!! Something went wrong");
   }
 });
