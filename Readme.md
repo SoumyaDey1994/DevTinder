@@ -43,5 +43,8 @@
     - Connect to database using mongoose.connect
     - Start server once connection to DB is successful
     - Create a user schema
-    - Create a User model out of schema
-    - 
+    - Create a User model from schema
+    - Write /signup API controller
+    - Save static user document to DB
+    - Handle error scenario with try-catch
+    -

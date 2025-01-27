@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
+const User = require("./models/user");
 
 const app = express();
 
@@ -76,6 +77,30 @@ app.get(
 
 app.get("/hello", (req, res) => {
   return res.status(200).send("Greetings from /hello route...!!");
+});
+
+app.post("/signup", async (req, res) => {
+  const user = new User({
+    firstName: "Sachin",
+    lastName: "Tendulakar",
+    email: "cricgoat@gmail.com",
+    password: "goat",
+    age: 50,
+    gender: "Male",
+  });
+
+  try {
+    const result = await user.save();
+    return res.status(200).send({
+      ...result["__doc"],
+      message: "User saved successfully",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Error in saving user",
+      error: error,
+    });
+  }
 });
 
 app.get("/", (err, req, res, next) => {
