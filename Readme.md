@@ -42,3 +42,6 @@
     - Create MongoDB cluster, create database & collection (Mongo Atlas)
     - Connect to database using mongoose.connect
     - Start server once connection to DB is successful
+    - Create a user schema
+    - Create a User model out of schema
+    - 

@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const DB_USER = "namastenodeskd";
 const DB_PASSWORD = "f4rUlxnLmZK4sVaL";
-const CONNECTION_STRING = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@namastenodeskd.xjwy5.mongodb.net/DevTinder?retryWrites=true&w=majority&appName=NamasteNodeSkd`;
+const DB_NAME = "DevTinder";
+const CONNECTION_STRING = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@namastenodeskd.xjwy5.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=NamasteNodeSkd`;
 
 
 const connectDB = async () => {
