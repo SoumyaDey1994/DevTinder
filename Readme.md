@@ -36,3 +36,9 @@
     - What is middleware & why to use it ?
     - Use chain of middlewares to perform taks 1 after another in sequence
     - Common error handler route
+
+### Database Connection & Schema
+    - Install Mongoose
+    - Create MongoDB cluster, create database & collection (Mongo Atlas)
+    - Connect to database using mongoose.connect
+    - Start server once connection to DB is successful

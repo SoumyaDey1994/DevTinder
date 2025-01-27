@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const connectDB = require("./config/db");
 
 const app = express();
 
@@ -9,7 +10,7 @@ app.use(bodyParser.json());
 
 app.get("/users/:id", (req, res) => {
   const userId = req.params.id;
-  const targetUser = users.find(user => user.id.toString() === userId);
+  const targetUser = users.find((user) => user.id.toString() === userId);
   return res.status(200).send(targetUser || {});
 });
 
@@ -88,6 +89,9 @@ app.get("/", (req, res) => {
 });
 
 APP_PORT = 7777;
-app.listen(APP_PORT, () =>
-  console.log(`Server is listening at port ${APP_PORT}`)
-);
+
+connectDB().then(() => {
+  app.listen(APP_PORT, () => {
+    console.log(`Server is listening at port ${APP_PORT}`);
+  });
+});
