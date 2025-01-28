@@ -47,4 +47,11 @@
     - Write /signup API controller
     - Save static user document to DB
     - Handle error scenario with try-catch
-    -
+    
+### Developing APIs
+    - JSON vs JS Object
+    - Include express.json() or bodyParser.json() as middleware
+    - Read data from request body
+    - Create User from incoming request data & save to DB
+    - Get all users from DB
+    - Find user by email (from query param)

@@ -15,10 +15,6 @@ app.get("/users/:id", (req, res) => {
   return res.status(200).send(targetUser || {});
 });
 
-app.get("/users", (req, res) => {
-  return res.status(200).send(users);
-});
-
 app.post("/users", (req, res) => {
   const newUser = {
     id: Math.floor(Math.random() * 10000),
@@ -56,6 +52,28 @@ app.delete("/users/:id", (req, res) => {
   });
 });
 
+app.get("/users", async (req, res) => {
+  const email = req.query?.email;
+  if (!email) {
+    return res.status(400).send({ message: "Email Id is missing" });
+  }
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: `User with email ${email} not found` });
+    }
+    return res.status(200).send({ result: user });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Error in fetching user with email " + email,
+      error: error,
+    });
+  }
+});
+
 app.get(
   "/test",
   (req, res, next) => {
@@ -80,24 +98,32 @@ app.get("/hello", (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const user = new User({
-    firstName: "Sachin",
-    lastName: "Tendulakar",
-    email: "cricgoat@gmail.com",
-    password: "goat",
-    age: 50,
-    gender: "Male",
-  });
+  const reqBody = req.body;
+  const user = new User(reqBody);
 
   try {
     const result = await user.save();
-    return res.status(200).send({
-      ...result["__doc"],
+    return res.status(201).send({
+      ...result["_doc"],
       message: "User saved successfully",
     });
   } catch (error) {
     return res.status(500).send({
       message: "Error in saving user",
+      error: error,
+    });
+  }
+});
+
+app.get("/feed", async (req, res) => {
+  try {
+    const profiles = await User.find({});
+    return res.status(200).send({
+      result: profiles,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Error in fetching user profiles",
       error: error,
     });
   }
