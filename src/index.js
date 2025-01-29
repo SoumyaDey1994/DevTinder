@@ -5,51 +5,10 @@ const User = require("./models/user");
 
 const app = express();
 
-const users = [];
-
 app.use(bodyParser.json());
 
-app.get("/users/:id", (req, res) => {
-  const userId = req.params.id;
-  const targetUser = users.find((user) => user.id.toString() === userId);
-  return res.status(200).send(targetUser || {});
-});
-
-app.post("/users", (req, res) => {
-  const newUser = {
-    id: Math.floor(Math.random() * 10000),
-    ...req.body,
-  };
-  users.push(newUser);
-
-  return res.status(201).send({
-    ...newUser,
-    message: "User created successfully",
-  });
-});
-
-app.put("/users/:id", (req, res) => {
-  const userId = req.params.id;
-  const targetUserIndex = users.findIndex(
-    (user) => user.id.toString() === userId
-  );
-  if (targetUserIndex > -1) {
-    users[targetUserIndex] = {
-      id: userId,
-      ...req.body,
-    };
-  }
-  return res.status(200).send({
-    ...users[targetUserIndex],
-    message: "User updated successfully",
-  });
-});
-
-app.delete("/users/:id", (req, res) => {
-  return res.status(200).send({
-    id: req.params.id,
-    message: "User deleted successfully",
-  });
+app.get("/hello", (req, res) => {
+  return res.status(200).send("Greetings from /hello route...!!");
 });
 
 app.get("/users", async (req, res) => {
@@ -74,27 +33,79 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.get(
-  "/test",
-  (req, res, next) => {
-    console.log("Route Handler 1");
-    next();
-  },
-  (req, res, next) => {
-    console.log("Route Handler 2");
-    next();
-    // return res.status(200).send("Return from 2nd handler");
-  },
-  (req, res, next) => {
-    console.log("Route Handler 3");
-    // next();
-    // return res.status(200).send("Return from 3rd handler");
-    throw new Error("Cutom error");
-  }
-);
+app.get("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+  if (!userId)
+    return res.status(400).send({ message: "Please attach an user id" });
 
-app.get("/hello", (req, res) => {
-  return res.status(200).send("Greetings from /hello route...!!");
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: `User with id ${userId} not found` });
+    } else {
+      return res.status(200).send({ result: user });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: `Error in fetching user with id ${userId}`,
+      error: error.getMessage(),
+    });
+  }
+});
+
+app.patch("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+  if (!userId)
+    return res.status(400).send({ message: "Please provide an user id" });
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: req.body },
+      { returnDocument: "after" }
+    );
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: `User with id ${userId} not found` });
+    }
+    return res
+      .status(200)
+      .send({ result: user, message: `User updated successfully` });
+  } catch (error) {
+    return res.status(500).send({
+      message: `Error in updating user ${userId}`,
+      error: error,
+    });
+  }
+});
+
+app.delete("/users/:id", async (req, res) => {
+  const userId = req.params.id;
+  if (!userId)
+    return res.status(400).send({ message: "Please attach an user id" });
+
+  try {
+    const user = await User.findByIdAndDelete(userId, {
+      returnDocument: "before",
+    });
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: `User with id ${userId} not found` });
+    }
+    return res
+      .status(200)
+      .send({ result: user, message: `User deleetd successfully` });
+  } catch (error) {
+    return res.status(500).send({
+      message: `Error in deleteing user ${userId}`,
+      error: error,
+    });
+  }
 });
 
 app.post("/signup", async (req, res) => {

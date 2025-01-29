@@ -55,3 +55,7 @@
     - Create User from incoming request data & save to DB
     - Get all users from DB
     - Find user by email (from query param)
+    - Find user by id
+    - Delete user by id
+    - Update user by id
+    -
